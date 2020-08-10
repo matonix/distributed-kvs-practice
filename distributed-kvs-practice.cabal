@@ -1,0 +1,87 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: fea286ba57252fe5c6031822bb0449c787675c00fdb0c45cf8d584bbdfd85df7
+
+name:           distributed-kvs-practice
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/matonix/distributed-kvs-practice#readme>
+homepage:       https://github.com/matonix/distributed-kvs-practice#readme
+bug-reports:    https://github.com/matonix/distributed-kvs-practice/issues
+author:         maton
+maintainer:     automatonix@gmail.com
+copyright:      Haruki Yokoyama
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/matonix/distributed-kvs-practice
+
+library
+  exposed-modules:
+      Database
+      DistribUtils
+  other-modules:
+      Paths_distributed_kvs_practice
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers <0.6
+    , distributed-process
+    , distributed-process-simplelocalnet
+    , distributed-static
+    , network
+    , network-transport-tcp
+    , stm
+    , template-haskell
+  default-language: Haskell2010
+
+executable db
+  main-is: Db.hs
+  other-modules:
+      Paths_distributed_kvs_practice
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers <0.6
+    , distributed-kvs-practice
+    , distributed-process
+    , distributed-process-simplelocalnet
+    , distributed-static
+    , network
+    , network-transport-tcp
+    , stm
+    , template-haskell
+  default-language: Haskell2010
+
+test-suite distributed-kvs-practice-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_distributed_kvs_practice
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers <0.6
+    , distributed-kvs-practice
+    , distributed-process
+    , distributed-process-simplelocalnet
+    , distributed-static
+    , network
+    , network-transport-tcp
+    , stm
+    , template-haskell
+  default-language: Haskell2010
