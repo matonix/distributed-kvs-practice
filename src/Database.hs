@@ -45,15 +45,19 @@ server peers = do
     say $ printf "spawning on %s" (show nid)
     spawn nid $(mkStaticClosure 'worker)
 
-  forever $ do
-    m <- expect
-    case m of
-      s@(Set k _) ->
-        let pid = selectWorker ps k
-         in send pid s
-      g@(Get k _) ->
-        let pid = selectWorker ps k
-         in send pid g
+  mapM_ monitor ps
+
+  forever $ receiveWait
+    [ match $ \m -> case m of
+        s@(Set k v) -> do
+          let pid = selectWorker ps k
+          send pid s
+        g@(Get k _) -> do
+          let pid = selectWorker ps k
+          send pid g
+    -- , match $ \(ProcessMonitorNotification _ref deadpid reason) -> do
+    --     say $ printf "process %s died: %s" (show deadpid) (show reason)
+    ]
 
 -- キー空間の分割: ワーカーの数を法としてキーの最初の文字をとる
 selectWorker :: [ProcessId] -> Key -> ProcessId
