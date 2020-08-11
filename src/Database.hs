@@ -47,19 +47,34 @@ server peers = do
 
   mapM_ monitor ps
 
-  forever $ receiveWait
+  let pss = mkPairs ps
+  loop pss
+ where
+  loop pss = receiveWait
     [ match $ \m -> case m of
         s@(Set k v) -> do
-          let pid = selectWorker ps k
-          send pid s
+          let pids = selectWorkers pss k
+          mapM_ (\pid -> send pid s) pids
+          loop pss
         g@(Get k _) -> do
-          let pid = selectWorker ps k
-          send pid g
-    -- , match $ \(ProcessMonitorNotification _ref deadpid reason) -> do
-    --     say $ printf "process %s died: %s" (show deadpid) (show reason)
+          let pids = selectWorkers pss k
+          mapM_ (\pid -> send pid g) pids
+          loop pss
+    , match $ \(ProcessMonitorNotification _ref deadpid reason) -> do
+        say $ printf "process %s died: %s" (show deadpid) (show reason)
+        let pss' = removeWorker pss deadpid
+        say $ printf "processes: %s" (show pss')
+        loop pss'
     ]
 
--- キー空間の分割: ワーカーの数を法としてキーの最初の文字をとる
-selectWorker :: [ProcessId] -> Key -> ProcessId
-selectWorker ps [] = error "empty key"
-selectWorker ps (k : ey) = ps !! (ord k `mod` (length ps))
+selectWorkers :: [[ProcessId]] -> Key -> [ProcessId]
+selectWorkers pss [] = error "empty key"
+selectWorkers pss (k : ey) = pss !! (ord k `mod` (length pss))
+
+mkPairs :: [ProcessId] -> [[ProcessId]]
+mkPairs [] = [[]]
+mkPairs [a] = [[a]]
+mkPairs (a:b:xs) = [a, b] : mkPairs xs
+
+removeWorker :: [[ProcessId]] -> ProcessId -> [[ProcessId]]
+removeWorker pss deadpid = filter (not . null) $ map (\ps -> filter (/=deadpid) ps) pss
