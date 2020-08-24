@@ -20,8 +20,6 @@
 
 ## Part 4
 
-[diff](https://github.com/matonix/distributed-kvs-practice/commit/8c7fcc1a6f38fb8f9e923b5870b625114440891b)
+[Database.hs](https://github.com/matonix/distributed-kvs-practice/blob/77aa4cb76eca9a646fc235babe38fb49db479a0a/src/Database.hs)
 
-[Database.hs](https://github.com/matonix/distributed-kvs-practice/blob/8c7fcc1a6f38fb8f9e923b5870b625114440891b/src/Database.hs)
-
-[Worker.hs](https://github.com/matonix/distributed-kvs-practice/blob/8c7fcc1a6f38fb8f9e923b5870b625114440891b/src/Worker.hs)
+[Worker.hs](https://github.com/matonix/distributed-kvs-practice/blob/77aa4cb76eca9a646fc235babe38fb49db479a0a/src/Worker.hs)
