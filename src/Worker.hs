@@ -22,7 +22,7 @@ type Value = String
 data Message
   = Set Key Value
   | Get Key (SendPort (Maybe Value))
-  deriving (Typeable, Generic)
+  deriving (Typeable, Generic, Show)
 
 instance Binary Message
 

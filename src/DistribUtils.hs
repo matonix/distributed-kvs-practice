@@ -22,19 +22,19 @@ distribMain master frtable = do
     [] -> do
       backend <- initializeBackend defaultHost defaultPort rtable
       startMaster backend master
-    [ "master" ] -> do
+    [ "leader" ] -> do
       backend <- initializeBackend defaultHost defaultPort rtable
       startMaster backend master
-    [ "master", port ] -> do
+    [ "leader", port ] -> do
       backend <- initializeBackend defaultHost port rtable
       startMaster backend master
-    [ "slave" ] -> do
+    [ "follower" ] -> do
       backend <- initializeBackend defaultHost defaultPort rtable
       startSlave backend
-    [ "slave", port ] -> do
+    [ "follower", port ] -> do
       backend <- initializeBackend defaultHost port rtable
       startSlave backend
-    [ "slave", host, port ] -> do
+    [ "follower", host, port ] -> do
       backend <- initializeBackend host port rtable
       startSlave backend
 

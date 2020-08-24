@@ -48,6 +48,7 @@ server peers = do
   mapM_ monitor ps
 
   let pss = mkPairs ps
+  say $ printf "processes: %s" (show pss)
   loop pss
  where
   loop pss = receiveWait
@@ -74,6 +75,7 @@ selectWorkers pss (k : ey) = pss !! (ord k `mod` (length pss))
 mkPairs :: [ProcessId] -> [[ProcessId]]
 mkPairs [] = [[]]
 mkPairs [a] = [[a]]
+mkPairs (a:b:[]) = [[a, b]]
 mkPairs (a:b:xs) = [a, b] : mkPairs xs
 
 removeWorker :: [[ProcessId]] -> ProcessId -> [[ProcessId]]
